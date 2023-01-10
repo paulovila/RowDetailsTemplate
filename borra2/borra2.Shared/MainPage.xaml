@@ -1,0 +1,75 @@
+﻿<Page
+    x:Class="borra2.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:borra2"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <local:NullOrNoneToVisibilityConverter x:Key="NullOrNoneToVisibilityConverter" />
+        <DataTemplate x:Key="DataGridRowDetailsTemplate1">
+        
+        </DataTemplate>
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <toolkit:DataGrid
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Margin="0,0,0,10"
+            AutoGenerateColumns="False"
+            HorizontalScrollBarVisibility="Auto"
+            ItemsSource="{x:Bind As}"
+            RowDetailsVisibilityMode="Visible"
+            VerticalScrollBarVisibility="Auto">
+            <toolkit:DataGrid.Columns>
+                <toolkit:DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding DocumentNumber}"
+                    Header="DocumentNumber"
+                    IsReadOnly="True" />
+                <toolkit:DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding RevisionNumber}"
+                    Header="Revision"
+                    IsReadOnly="True" />
+            </toolkit:DataGrid.Columns>
+            <toolkit:DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <Grid Background="Green">
+                        <ItemsControl
+                    Grid.Row="1"
+                    ItemsSource="{Binding Bs}"
+                    Visibility="{Binding Bs, Converter={StaticResource NullOrNoneToVisibilityConverter}}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock
+                                Margin="6"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Foreground="White"
+                                Text="{Binding Validation}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Grid>
+                </DataTemplate>
+            </toolkit:DataGrid.RowDetailsTemplate>
+        </toolkit:DataGrid>
+        <Button
+            Grid.Row="1"
+            Command="{x:Bind AddCommand}"
+            Content="Add" />
+    </Grid>
+</Page>
