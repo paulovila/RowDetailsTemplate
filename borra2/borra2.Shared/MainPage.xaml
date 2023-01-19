@@ -6,26 +6,21 @@
     xmlns:local="using:borra2"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:toolkit="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    x:DefaultBindMode="OneWay"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
     <Page.Resources>
         <local:NullOrNoneToVisibilityConverter x:Key="NullOrNoneToVisibilityConverter" />
-        <DataTemplate x:Key="DataGridRowDetailsTemplate1">
-        
-        </DataTemplate>
+        <DataTemplate x:Key="DataGridRowDetailsTemplate1" />
     </Page.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <StackPanel>
         <toolkit:DataGrid
             Grid.Row="0"
-            Grid.RowSpan="2"
-            Margin="0,0,0,10"
+            Grid.RowSpan="3"
+            Margin="10,10,10,10"
             AutoGenerateColumns="False"
             HorizontalScrollBarVisibility="Auto"
-            ItemsSource="{x:Bind As}"
+            ItemsSource="{x:Bind V.As}"
             RowDetailsVisibilityMode="Visible"
             VerticalScrollBarVisibility="Auto">
             <toolkit:DataGrid.Columns>
@@ -43,10 +38,7 @@
             <toolkit:DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <Grid Background="Green">
-                        <ItemsControl
-                    Grid.Row="1"
-                    ItemsSource="{Binding Bs}"
-                    Visibility="{Binding Bs, Converter={StaticResource NullOrNoneToVisibilityConverter}}">
+                        <ItemsControl ItemsSource="{Binding Bs}" Visibility="{Binding Bs, Converter={StaticResource NullOrNoneToVisibilityConverter}}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Vertical" />
@@ -55,11 +47,11 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock
-                                Margin="6"
-                                VerticalAlignment="Center"
-                                FontWeight="Bold"
-                                Foreground="White"
-                                Text="{Binding Validation}" />
+                                        Margin="6"
+                                        VerticalAlignment="Center"
+                                        FontWeight="Bold"
+                                        Foreground="White"
+                                        Text="{Binding Validation}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -67,9 +59,43 @@
                 </DataTemplate>
             </toolkit:DataGrid.RowDetailsTemplate>
         </toolkit:DataGrid>
-        <Button
-            Grid.Row="1"
-            Command="{x:Bind AddCommand}"
-            Content="Add" />
-    </Grid>
+        <TextBlock Text="Work around: Display the row detail at the bottom:" />
+        <toolkit:DataGrid
+            x:Name="d2"
+            Margin="10,10,10,10"
+            AutoGenerateColumns="False"
+            HorizontalScrollBarVisibility="Auto"
+            ItemsSource="{x:Bind V.As}"
+            RowDetailsVisibilityMode="Visible"
+            VerticalScrollBarVisibility="Auto">
+            <toolkit:DataGrid.Columns>
+                <toolkit:DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding DocumentNumber}"
+                    Header="DocumentNumber"
+                    IsReadOnly="True" />
+                <toolkit:DataGridTextColumn
+                    Width="Auto"
+                    Binding="{Binding RevisionNumber}"
+                    Header="Revision"
+                    IsReadOnly="True" />
+            </toolkit:DataGrid.Columns>
+        </toolkit:DataGrid>
+        <!--<Grid Background="Green"  Visibility="{x:Bind V.AggregatedValidations, Converter={StaticResource NullOrNoneToVisibilityConverter}}">-->
+        <Grid Background="Green">
+            <ItemsControl ItemsSource="{x:Bind V.AggregatedValidations, Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock
+                            Margin="6"
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            Foreground="White"
+                            Text="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+        <Button Command="{x:Bind V.AddCommand}" Content="Add" />
+    </StackPanel>
 </Page>
